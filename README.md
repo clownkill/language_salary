@@ -26,6 +26,7 @@ python main.py
 ```
 
 ## Пример результата вывода программы
+![salary_output](https://sun9-54.userapi.com/impg/wXzz9kHIi1PU5QnnIiXXpm7PeSN1rxl0cjQ5tQ/GbvoZe9LTaY.jpg?size=911x631&quality=95&sign=39057503b7d4f55b81af6ec848bb57f3&type=album)
 
 ## Цель проекта
 
