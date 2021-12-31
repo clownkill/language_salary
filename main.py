@@ -50,31 +50,58 @@ def get_sj_salary_statistics(vacancies):
     return salaries, processed_vacancies
 
 
+def get_hh_language_statistics(url, params, language):
+    vacancies = []
+    pages = 1
+    vacancies_quantity = 0
+    for page in count(0, 1):
+        params['page'] = page
+        if page == pages:
+            break
+        try:
+            response = requests.get(url, params=params)
+            response.raise_for_status()
+            responsed_vacansies = response.json()
+            vacancies_quantity = responsed_vacansies['found']
+            vacancies.extend(responsed_vacansies['items'])
+            pages = responsed_vacansies['pages']
+        except requests.exceptions.HTTPError:
+            print(f'Ошибка получения данных по языку {language} от hh.ru')
+    return vacancies, vacancies_quantity
+
+
+def get_sj_language_statistics(url, headers, params, language):
+    vacancies = []
+    vacancies_quantity = 0
+    for page in count(0, 1):
+        more = True
+        params['page'] = page
+        params['more'] = more
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            responsed_vacansies = response.json()
+            vacancies_quantity = responsed_vacansies['total']
+            vacancies.extend(responsed_vacansies['objects'])
+            more = responsed_vacansies['more']
+        except requests.exceptions.HTTPError:
+            print(f'Ошибка получения данных по языку {language} \
+            от superjob.ru')
+        if not more:
+            break
+    return vacancies, vacancies_quantity
+
+
 def get_hh_statistics(languages):
     url = 'https://api.hh.ru/vacancies'
     languages_stat = {}
     for language in languages:
-        vacancies = []
-        pages = 1
-        vacancies_quantity = 0
         params = {
                 'text': f'программист {language}',
                 'area.name': 'Moscow',
                 'period': 30,
             }
-        for page in count(0, 1):
-            params['page'] = page
-            if page == pages:
-                break
-            try:
-                response = requests.get(url, params=params)
-                response.raise_for_status()
-                responsed_vacansies = response.json()
-                vacancies_quantity = responsed_vacansies['found']
-                vacancies.extend(responsed_vacansies['items'])
-                pages = responsed_vacansies['pages']
-            except requests.exceptions.HTTPError:
-                print(f'Ошибка получения данных по языку {language} от hh.ru')
+        vacancies, vacancies_quantity = get_hh_language_statistics(url, params, language)
         salaries, processed_vacancies = get_hh_salary_statictics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
@@ -95,29 +122,12 @@ def get_sj_statistics(apikey, languages):
     }
     languages_stat = {}
     for language in languages:
-        vacancies = []
-        vacancies_quantity = 0
         params = {
                 'keyword': f'программист {language}',
                 'town': 'москва',
                 'count': 100,
             }
-        for page in count(0, 1):
-            more = True
-            params['page'] = page
-            params['more'] = more
-            try:
-                response = requests.get(url, headers=headers, params=params)
-                response.raise_for_status()
-                responsed_vacansies = response.json()
-                vacancies_quantity = responsed_vacansies['total']
-                vacancies.extend(responsed_vacansies['objects'])
-                more = responsed_vacansies['more']
-            except requests.exceptions.HTTPError:
-                print(f'Ошибка получения данных по языку {language} \
-                от superjob.ru')
-            if not more:
-                break
+        vacancies, vacancies_quantity = get_sj_language_statistics(url, headers, params, language)
         salaries, processed_vacancies = get_sj_salary_statistics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
