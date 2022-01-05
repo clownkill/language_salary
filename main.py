@@ -55,21 +55,17 @@ def get_sj_salary_statistics(vacancies):
 
 def get_hh_language_statistics(url, params, language):
     vacancies = []
-    pages = 1
     vacancies_quantity = 0
     for page in count(0, 1):
         params['page'] = page
-        if page == pages:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        responsed_vacansies = response.json()
+        vacancies_quantity = responsed_vacansies['found']
+        vacancies.extend(responsed_vacansies['items'])
+        pages = responsed_vacansies['pages']
+        if page == pages - 1:
             break
-        try:
-            response = requests.get(url, params=params)
-            response.raise_for_status()
-            responsed_vacansies = response.json()
-            vacancies_quantity = responsed_vacansies['found']
-            vacancies.extend(responsed_vacansies['items'])
-            pages = responsed_vacansies['pages']
-        except requests.exceptions.HTTPError:
-            print(f'Ошибка получения данных по языку {language} от hh.ru')
     return vacancies, vacancies_quantity
 
 
