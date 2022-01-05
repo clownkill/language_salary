@@ -29,8 +29,6 @@ def predict_salary(salary_from, salary_to):
         return (salary_from + salary_to) / 2
 
 
-
-
 def get_hh_salary_statictics(vacancies):
     salaries = []
     processed_vacancies = 0
@@ -90,10 +88,10 @@ def get_hh_statistics(languages):
     language_stat = {}
     for language in languages:
         params = {
-                'text': f'программист {language}',
-                'area.name': 'Moscow',
-                'period': 30,
-            }
+            'text': f'программист {language}',
+            'area.name': 'Moscow',
+            'period': 30,
+        }
         vacancies, vacancies_quantity = get_hh_vacancies(url, params, language)
         salaries, processed_vacancies = get_hh_salary_statictics(vacancies)
         try:
@@ -116,11 +114,12 @@ def get_sj_statistics(apikey, languages):
     language_stat = {}
     for language in languages:
         params = {
-                'keyword': f'программист {language}',
-                'town': 'москва',
-                'count': 100,
-            }
-        vacancies, vacancies_quantity = get_sj_vacancies(url, headers, params, language)
+            'keyword': f'программист {language}',
+            'town': 'москва',
+            'count': 100,
+        }
+        vacancies, vacancies_quantity = get_sj_vacancies(url, headers,
+                                                         params, language)
         salaries, processed_vacancies = get_sj_salary_statistics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
