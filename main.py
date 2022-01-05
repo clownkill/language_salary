@@ -87,7 +87,7 @@ def get_sj_vacancies(url, headers, params, language):
 
 def get_hh_statistics(languages):
     url = 'https://api.hh.ru/vacancies'
-    languages_stat = {}
+    language_stat = {}
     for language in languages:
         params = {
                 'text': f'программист {language}',
@@ -100,12 +100,12 @@ def get_hh_statistics(languages):
             average_salary = int(sum(salaries) / processed_vacancies)
         except ZeroDivisionError:
             average_salary = 0
-        languages_stat[language] = {
+        language_stat[language] = {
             'vacancies_found': vacancies_quantity,
             'processed_vacancies': processed_vacancies,
             'average_salary': average_salary,
         }
-    return languages_stat
+    return language_stat
 
 
 def get_sj_statistics(apikey, languages):
@@ -113,7 +113,7 @@ def get_sj_statistics(apikey, languages):
     headers = {
         'X-Api-App-Id': apikey,
     }
-    languages_stat = {}
+    language_stat = {}
     for language in languages:
         params = {
                 'keyword': f'программист {language}',
@@ -126,12 +126,12 @@ def get_sj_statistics(apikey, languages):
             average_salary = int(sum(salaries) / processed_vacancies)
         except ZeroDivisionError:
             average_salary = 0
-        languages_stat[language] = {
+        language_stat[language] = {
             'vacancies_found': vacancies_quantity,
             'processed_vacancies': processed_vacancies,
             'average_salary': average_salary,
         }
-    return languages_stat
+    return language_stat
 
 
 def create_table(languages_stat, table_name):
