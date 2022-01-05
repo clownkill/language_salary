@@ -73,19 +73,13 @@ def get_sj_language_statistics(url, headers, params, language):
     vacancies = []
     vacancies_quantity = 0
     for page in count(0, 1):
-        more = True
         params['page'] = page
-        params['more'] = more
-        try:
-            response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            responsed_vacansies = response.json()
-            vacancies_quantity = responsed_vacansies['total']
-            vacancies.extend(responsed_vacansies['objects'])
-            more = responsed_vacansies['more']
-        except requests.exceptions.HTTPError:
-            print(f'Ошибка получения данных по языку {language} \
-            от superjob.ru')
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        responsed_vacansies = response.json()
+        vacancies_quantity = responsed_vacansies['total']
+        vacancies.extend(responsed_vacansies['objects'])
+        more = responsed_vacansies['more']
         if not more:
             break
     return vacancies, vacancies_quantity
