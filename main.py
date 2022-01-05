@@ -51,9 +51,14 @@ def get_sj_salary_statistics(vacancies):
     return salaries, processed_vacancies
 
 
-def get_hh_vacancies(url, params, language):
+def get_hh_vacancies(url, text, area_name, period):
     vacancies = []
     vacancies_quantity = 0
+    params = {
+        'text': text,
+        'area.name': area_name,
+        'period': period,
+    }
     for page in count(0, 1):
         params['page'] = page
         response = requests.get(url, params=params)
@@ -67,9 +72,17 @@ def get_hh_vacancies(url, params, language):
     return vacancies, vacancies_quantity
 
 
-def get_sj_vacancies(url, headers, params, language):
+def get_sj_vacancies(url, apikey, keyword, town, quantity):
     vacancies = []
     vacancies_quantity = 0
+    headers = {
+        'X-Api-App-Id': apikey,
+    }
+    params = {
+        'keyword': keyword,
+        'town': town,
+        'count': quantity,
+    }
     for page in count(0, 1):
         params['page'] = page
         response = requests.get(url, headers=headers, params=params)
@@ -89,10 +102,10 @@ def get_hh_statistics(languages):
     for language in languages:
         params = {
             'text': f'программист {language}',
-            'area.name': 'Moscow',
+            'area_name': 'Moscow',
             'period': 30,
         }
-        vacancies, vacancies_quantity = get_hh_vacancies(url, params, language)
+        vacancies, vacancies_quantity = get_hh_vacancies(url, **params)
         salaries, processed_vacancies = get_hh_salary_statictics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
@@ -108,18 +121,14 @@ def get_hh_statistics(languages):
 
 def get_sj_statistics(apikey, languages):
     url = 'https://api.superjob.ru/2.0/vacancies/'
-    headers = {
-        'X-Api-App-Id': apikey,
-    }
     language_stat = {}
     for language in languages:
         params = {
             'keyword': f'программист {language}',
             'town': 'москва',
-            'count': 100,
+            'quantity': 100,
         }
-        vacancies, vacancies_quantity = get_sj_vacancies(url, headers,
-                                                         params, language)
+        vacancies, vacancies_quantity = get_sj_vacancies(url, apikey, **params)
         salaries, processed_vacancies = get_sj_salary_statistics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
