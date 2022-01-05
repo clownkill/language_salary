@@ -53,7 +53,7 @@ def get_sj_salary_statistics(vacancies):
     return salaries, processed_vacancies
 
 
-def get_hh_language_statistics(url, params, language):
+def get_hh_vacancies(url, params, language):
     vacancies = []
     vacancies_quantity = 0
     for page in count(0, 1):
@@ -69,7 +69,7 @@ def get_hh_language_statistics(url, params, language):
     return vacancies, vacancies_quantity
 
 
-def get_sj_language_statistics(url, headers, params, language):
+def get_sj_vacancies(url, headers, params, language):
     vacancies = []
     vacancies_quantity = 0
     for page in count(0, 1):
@@ -94,7 +94,7 @@ def get_hh_statistics(languages):
                 'area.name': 'Moscow',
                 'period': 30,
             }
-        vacancies, vacancies_quantity = get_hh_language_statistics(url, params, language)
+        vacancies, vacancies_quantity = get_hh_vacancies(url, params, language)
         salaries, processed_vacancies = get_hh_salary_statictics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
@@ -120,7 +120,7 @@ def get_sj_statistics(apikey, languages):
                 'town': 'москва',
                 'count': 100,
             }
-        vacancies, vacancies_quantity = get_sj_language_statistics(url, headers, params, language)
+        vacancies, vacancies_quantity = get_sj_vacancies(url, headers, params, language)
         salaries, processed_vacancies = get_sj_salary_statistics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
@@ -134,7 +134,7 @@ def get_sj_statistics(apikey, languages):
     return languages_stat
 
 
-def print_table(languages_stat, table_name):
+def create_table(languages_stat, table_name):
     table_data = (
         (
             'Язык программирования',
@@ -171,8 +171,8 @@ def main():
     ]
     hh_statistic = get_hh_statistics(languages)
     sj_statistic = get_sj_statistics(sj_apikey, languages)
-    print(print_table(hh_statistic, 'HeadHunter Moscow'))
-    print(print_table(sj_statistic, 'SuperJob Moscow'))
+    print(create_table(hh_statistic, 'HeadHunter Moscow'))
+    print(create_table(sj_statistic, 'SuperJob Moscow'))
 
 
 if __name__ == '__main__':
