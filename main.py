@@ -168,9 +168,9 @@ def main():
         'Go',
         'Scala'
     ]
-    # hh_statistic = get_hh_statistics(languages)
+    hh_statistic = get_hh_statistics(languages)
     sj_statistic = get_sj_statistics(sj_apikey, languages)
-    # print(print_table(hh_statistic, 'HeadHunter Moscow'))
+    print(print_table(hh_statistic, 'HeadHunter Moscow'))
     print(print_table(sj_statistic, 'SuperJob Moscow'))
 
 
