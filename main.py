@@ -51,7 +51,8 @@ def get_sj_salary_statistics(vacancies):
     return salaries, processed_vacancies
 
 
-def get_hh_vacancies(url, text, area_name, period):
+def get_hh_vacancies(text, area_name, period):
+    url = 'https://api.hh.ru/vacancies'
     vacancies = []
     vacancies_quantity = 0
     params = {
@@ -72,7 +73,8 @@ def get_hh_vacancies(url, text, area_name, period):
     return vacancies, vacancies_quantity
 
 
-def get_sj_vacancies(url, apikey, keyword, town, quantity):
+def get_sj_vacancies(apikey, keyword, town, quantity):
+    url = 'https://api.superjob.ru/2.0/vacancies/'
     vacancies = []
     vacancies_quantity = 0
     headers = {
@@ -97,7 +99,6 @@ def get_sj_vacancies(url, apikey, keyword, town, quantity):
 
 
 def get_hh_statistics(languages):
-    url = 'https://api.hh.ru/vacancies'
     language_stat = {}
     for language in languages:
         params = {
@@ -105,7 +106,7 @@ def get_hh_statistics(languages):
             'area_name': 'Moscow',
             'period': 30,
         }
-        vacancies, vacancies_quantity = get_hh_vacancies(url, **params)
+        vacancies, vacancies_quantity = get_hh_vacancies(**params)
         salaries, processed_vacancies = get_hh_salary_statictics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
@@ -120,7 +121,6 @@ def get_hh_statistics(languages):
 
 
 def get_sj_statistics(apikey, languages):
-    url = 'https://api.superjob.ru/2.0/vacancies/'
     language_stat = {}
     for language in languages:
         params = {
@@ -128,7 +128,7 @@ def get_sj_statistics(apikey, languages):
             'town': 'москва',
             'quantity': 100,
         }
-        vacancies, vacancies_quantity = get_sj_vacancies(url, apikey, **params)
+        vacancies, vacancies_quantity = get_sj_vacancies(apikey, **params)
         salaries, processed_vacancies = get_sj_salary_statistics(vacancies)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
