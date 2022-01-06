@@ -143,22 +143,20 @@ def get_sj_statistics(apikey, languages):
 
 
 def create_table(languages_stat, table_name):
-    table_data = (
-        (
-            'Язык программирования',
-            'Вакансий найдено',
-            'Вакансий обработано',
-            'Средняя зарплата'
+    table_rows = ((
+        'Язык программирования',
+        'Вакансий найдено',
+        'Вакансий обработано',
+        'Средняя зарплата',
+    ),)
+    for language, language_info in languages_stat.items():
+        table_rows += (
+            language,
+            language_info['vacancies_found'],
+            language_info['processed_vacancies'],
+            language_info['average_salary'],
         ),
-    )
-    for name, info in languages_stat.items():
-        table_data += (
-                          name,
-                          info['vacancies_found'],
-                          info['processed_vacancies'],
-                          info['average_salary']
-                      ),
-    table_instance = AsciiTable(table_data, table_name)
+    table_instance = AsciiTable(table_rows, table_name)
     return f'\n {table_instance.table} \n'
 
 
@@ -175,7 +173,7 @@ def main():
         'C#',
         'C',
         'Go',
-        'Scala'
+        'Scala',
     ]
     hh_statistic = get_hh_statistics(languages)
     sj_statistic = get_sj_statistics(sj_apikey, languages)
