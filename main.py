@@ -29,22 +29,11 @@ def predict_salary(salary_from, salary_to):
         return (salary_from + salary_to) / 2
 
 
-def get_hh_salary_statictics(vacancies):
+def get_salary_statistics(vacancies, predict_rub_salary):
     salaries = []
     processed_vacancies = 0
     for vacancy in vacancies:
-        salary = predict_rub_salary_hh(vacancy)
-        if salary:
-            salaries.append(salary)
-            processed_vacancies += 1
-    return salaries, processed_vacancies
-
-
-def get_sj_salary_statistics(vacancies):
-    salaries = []
-    processed_vacancies = 0
-    for vacancy in vacancies:
-        salary = predict_rub_salary_sj(vacancy)
+        salary = predict_rub_salary(vacancy)
         if salary:
             salaries.append(salary)
             processed_vacancies += 1
@@ -106,7 +95,7 @@ def get_hh_statistics(languages):
             'period': 30,
         }
         vacancies, vacancies_quantity = get_hh_vacancies(url, **params)
-        salaries, processed_vacancies = get_hh_salary_statictics(vacancies)
+        salaries, processed_vacancies = get_salary_statistics(vacancies, predict_rub_salary_hh)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
         except ZeroDivisionError:
@@ -129,7 +118,7 @@ def get_sj_statistics(apikey, languages):
             'quantity': 100,
         }
         vacancies, vacancies_quantity = get_sj_vacancies(url, apikey, **params)
-        salaries, processed_vacancies = get_sj_salary_statistics(vacancies)
+        salaries, processed_vacancies = get_salary_statistics(vacancies, predict_rub_salary_sj)
         try:
             average_salary = int(sum(salaries) / processed_vacancies)
         except ZeroDivisionError:
