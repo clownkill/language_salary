@@ -88,7 +88,7 @@ def get_sj_vacancies(apikey, keyword, town='москва', quantity=100):
 
 
 def get_hh_statistics(languages):
-    language_stat = {}
+    language_stats = {}
     for language in languages:
         query_text = f'программист {language}'
         vacancies, vacancies_quantity = get_hh_vacancies(query_text)
@@ -97,16 +97,16 @@ def get_hh_statistics(languages):
             average_salary = int(sum(salaries) / processed_vacancies)
         except ZeroDivisionError:
             average_salary = 0
-        language_stat[language] = {
+        language_stats[language] = {
             'vacancies_found': vacancies_quantity,
             'processed_vacancies': processed_vacancies,
             'average_salary': average_salary,
         }
-    return language_stat
+    return language_stats
 
 
 def get_sj_statistics(apikey, languages):
-    language_stat = {}
+    language_stats = {}
     for language in languages:
         query_text = f'программист {language}'
         vacancies, vacancies_quantity = get_sj_vacancies(apikey, query_text)
@@ -115,22 +115,22 @@ def get_sj_statistics(apikey, languages):
             average_salary = int(sum(salaries) / processed_vacancies)
         except ZeroDivisionError:
             average_salary = 0
-        language_stat[language] = {
+        language_stats[language] = {
             'vacancies_found': vacancies_quantity,
             'processed_vacancies': processed_vacancies,
             'average_salary': average_salary,
         }
-    return language_stat
+    return language_stats
 
 
-def create_table(languages_stat, table_name):
+def create_table(languages_stats, table_name):
     table_rows = ((
         'Язык программирования',
         'Вакансий найдено',
         'Вакансий обработано',
         'Средняя зарплата',
     ),)
-    for language, language_statistic in languages_stat.items():
+    for language, language_statistic in languages_stats.items():
         table_rows += (
             language,
             language_statistic['vacancies_found'],
