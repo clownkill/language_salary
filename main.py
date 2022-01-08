@@ -130,12 +130,12 @@ def create_table(languages_stat, table_name):
         'Вакансий обработано',
         'Средняя зарплата',
     ),)
-    for language, language_info in languages_stat.items():
+    for language, language_statistic in languages_stat.items():
         table_rows += (
             language,
-            language_info['vacancies_found'],
-            language_info['processed_vacancies'],
-            language_info['average_salary'],
+            language_statistic['vacancies_found'],
+            language_statistic['processed_vacancies'],
+            language_statistic['average_salary'],
         ),
     table_instance = AsciiTable(table_rows, table_name)
     return f'\n {table_instance.table} \n'
