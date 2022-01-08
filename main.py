@@ -1,7 +1,8 @@
-import requests
 import os
-from dotenv import load_dotenv
 from itertools import count
+
+import requests
+from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
