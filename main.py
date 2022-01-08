@@ -138,7 +138,7 @@ def create_table(languages_stat, table_name):
             language_statistic['average_salary'],
         ),
     table_instance = AsciiTable(table_rows, table_name)
-    return f'\n {table_instance.table} \n'
+    return table_instance.table
 
 
 def main():
@@ -159,6 +159,7 @@ def main():
     hh_statistic = get_hh_statistics(languages)
     sj_statistic = get_sj_statistics(sj_apikey, languages)
     print(create_table(hh_statistic, 'HeadHunter Moscow'))
+    print()
     print(create_table(sj_statistic, 'SuperJob Moscow'))
 
 
